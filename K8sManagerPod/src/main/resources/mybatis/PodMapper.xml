@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.k8smanager.pod.mapper.PodMapper">
+
+    <insert id="setPodDataList" parameterType="PodData">
+        INSERT INTO pod(name, ready, status, restarts, ip,
+                        created_time as createdTime,
+                        node_name as nodeName, labels)
+        VALUES (#{name}, #{ready}, #{status}, #{restarts}, #{ip}, #{created_time}, #{node_name}, #{labels})
+    </insert>
+
+    <select id="getPodDataList" resultType="PodData" parameterType="int">
+        SELECT idx, name, ready, status, restarts, ip,
+               created_time as createdTime,
+               node_name as nodeName,
+               labels
+        FROM pod
+        ORDER BY idx DESC
+        limit #{id}
+    </select>
+
+    <select id="getScheduledPodDataWithPagination" parameterType="Map" resultType="PodData">
+        select * from pod where name = #{name}
+        limit #{pagination.startRow}, #{pagination.perPage}
+
+    </select>
+
+    <select id="getScheduledPodList" parameterType="String" resultType="PodData">
+        select * from pod where name = #{name}
+    </select>
+
+    <select id="getSizeOfScheduledPodList" parameterType="String" resultType="int">
+        select count(*) from pod where name = #{name}
+    </select>
+
+</mapper>
